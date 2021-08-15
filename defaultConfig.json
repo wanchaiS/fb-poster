@@ -1,5 +1,6 @@
 {
     "shortlivedUserToken": "shortlivedUserToken",
+    "longlivedPageToken": "longlivedPageToken",
     "appId": "appId",
     "appSecret": "appSecret",
     "userId":"userId",
