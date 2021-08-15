@@ -1,0 +1,8 @@
+{
+    "shortlivedUserToken": "shortlivedUserToken",
+    "appId": "appId",
+    "appSecret": "appSecret",
+    "userId":"userId",
+    "pageId":"pageId",
+    "graphApiVersion": 11.0
+}

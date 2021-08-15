@@ -1,0 +1,5 @@
+# contains local deploy environment settings
+**/localConfig.json
+
+# py cache
+__pycache__/
