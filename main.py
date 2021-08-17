@@ -20,7 +20,7 @@ def main():
     prices = getGoldData()
     print(prices)
 
-    # post face book
+    # # post face book
     postFB(prices, config["longlivedPageToken"], config["pageId"])
     return
 
@@ -41,17 +41,11 @@ def getGoldData():
     sellBL = soup.find(id='DetailPlace_uc_goldprices1_lblBLSell')
     buyBL = soup.find(id='DetailPlace_uc_goldprices1_lblBLBuy')
 
-    sellOM = soup.find(id='DetailPlace_uc_goldprices1_lblOMSell')
-    buyOM = soup.find(id='DetailPlace_uc_goldprices1_lblOMBuy')
-
     date = soup.find(id='DetailPlace_uc_goldprices1_lblAsTime')
 
     prices = {
         "sellBL": sellBL.text,
         "buyBL": buyBL.text,
-
-        "sellOM": sellOM.text,
-        "buyOM": buyOM.text,
 
         "date": date.text
     }
@@ -94,16 +88,11 @@ def getLongLivedToken(shortlivedUserToken, appId, appSecret, userId, pageId, gra
 
 def postFB(prices, longlivedPageToken, pageId):
     # Your Access Keys
-    date = 'ราคาทองคำประจำวันที่ ' + prices["date"] + '\n'
-    typeBl = 'ทองคำแท่ง'
-    blSell = '\t ขาย: ' + prices["sellBL"]
-    blBuy = '\t ซื้อ: ' + prices["buyBL"] + '\n'
+    date = 'ราคาทองคำแท่งประจำวันที่ ' + prices["date"] + '\n'
+    blSell = 'ขาย: ' + prices["sellBL"] + '\t'
+    blBuy = 'ซื้อ: ' + prices["buyBL"]
 
-    typeOM = 'ทองรูปพรรณ'
-    blSell = '\t ขาย: ' + prices["sellOM"]
-    blBuy = '\t ซื้อ: ' + prices["buyOM"] + '\n'
-
-    msg = date + typeBl + blSell + blBuy + typeOM + blSell + blBuy
+    msg = date + blSell + blBuy
 
     post_url = 'https://graph.facebook.com/{}/feed'.format(pageId)
     payload = {
