@@ -10,7 +10,9 @@ def main():
     config = configger.get_config()
 
     # get long lived page token, never expired, un comment when want to generate long lived key
-    # getLongLivedToken(config["shortlivedUserToken"], config["appId"], config["appSecret"],config["userId"], config["pageId"], config["graphApiVersion"])
+    # lovelivedPageToken = getLongLivedToken(config["shortlivedUserToken"], config["appId"],
+    #                                        config["appSecret"], config["userId"], config["pageId"], config["graphApiVersion"])
+    # print(lovelivedPageToken)
 
     # from this point long lived page token
 
@@ -36,12 +38,22 @@ def getGoldData():
         print("Unable to retrive gold traders page")
 
     soup = BeautifulSoup(res.text, 'html.parser')
-    sellPrice = soup.find(id='DetailPlace_uc_goldprices1_lblBLSell')
-    buyPrice = soup.find(id='DetailPlace_uc_goldprices1_lblBLBuy')
+    sellBL = soup.find(id='DetailPlace_uc_goldprices1_lblBLSell')
+    buyBL = soup.find(id='DetailPlace_uc_goldprices1_lblBLBuy')
+
+    sellOM = soup.find(id='DetailPlace_uc_goldprices1_lblOMSell')
+    buyOM = soup.find(id='DetailPlace_uc_goldprices1_lblOMBuy')
+
+    date = soup.find(id='DetailPlace_uc_goldprices1_lblAsTime')
 
     prices = {
-        "sell": sellPrice.text,
-        "buy": buyPrice.text
+        "sellBL": sellBL.text,
+        "buyBL": buyBL.text,
+
+        "sellOM": sellOM.text,
+        "buyOM": buyOM.text,
+
+        "date": date.text
     }
 
     return prices
@@ -82,7 +94,17 @@ def getLongLivedToken(shortlivedUserToken, appId, appSecret, userId, pageId, gra
 
 def postFB(prices, longlivedPageToken, pageId):
     # Your Access Keys
-    msg = 'ราคาทองคำวันนี้  ขาย: ' + prices["sell"] + 'ซื้อ: ' + prices["buy"]
+    date = 'ราคาทองคำประจำวันที่ ' + prices["date"] + '\n'
+    typeBl = 'ทองคำแท่ง'
+    blSell = '\t ขาย: ' + prices["sellBL"]
+    blBuy = '\t ซื้อ: ' + prices["buyBL"] + '\n'
+
+    typeOM = 'ทองรูปพรรณ'
+    blSell = '\t ขาย: ' + prices["sellOM"]
+    blBuy = '\t ซื้อ: ' + prices["buyOM"] + '\n'
+
+    msg = date + typeBl + blSell + blBuy + typeOM + blSell + blBuy
+
     post_url = 'https://graph.facebook.com/{}/feed'.format(pageId)
     payload = {
         'message': msg,
